@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propcorn AI :: Trust Scoreboard</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 2em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 10px;
+            margin-bottom: 40px;
+        }
+        #scoreboard-container {
+            border: 1px solid #444;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            background-color: #222;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+        }
+        .score-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            font-size: 1.2em;
+        }
+        .score-entry:last-child {
+            border-bottom: none;
+        }
+        .identifier {
+            color: #76c7c0;
+        }
+        .score {
+            color: #fdd835;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>[ LIVE TRUST SCOREBOARD ]</h1>
+    <div id="scoreboard-container">
+        </div>
+
+    <script>
+        const container = document.getElementById('scoreboard-container');
+        // IMPORTANT: for users reading this Use the same key as in your .env file
+        const ADMIN_KEY = 'supersecretkey'; 
+
+        async function fetchScores() {
+            try {
+                const response = await fetch('/admin/scores', {
+                    headers: {
+                        'x-admin-api-key': ADMIN_KEY
+                    }
+                });
+                
+                if (!response.ok) {
+                    container.innerHTML = `<div class="score-entry">Error fetching scores: ${response.statusText}</div>`;
+                    return;
+                }
+
+                const scores = await response.json();
+                
+                // Clear previous scores
+                container.innerHTML = ''; 
+
+                if (Object.keys(scores).length === 0) {
+                    container.innerHTML = `<div class="score-entry">No actors tracked yet. Make some API requests!</div>`;
+                }
+
+                // Sort scores for consistent display
+                const sortedIdentifiers = Object.keys(scores).sort();
+
+                for (const identifier of sortedIdentifiers) {
+                    const scoreValue = scores[identifier];
+                    const entryDiv = document.createElement('div');
+                    entryDiv.className = 'score-entry';
+                    entryDiv.innerHTML = `
+                        <span class="identifier">${identifier}:</span>
+                        <span class="score">${scoreValue}</span>
+                    `;
+                    container.appendChild(entryDiv);
+                }
+
+            } catch (error) {
+                console.error('Failed to fetch scores:', error);
+                container.innerHTML = `<div class="score-entry">Could not connect to the server.</div>`;
+            }
+        }
+
+        // Fetch scores immediately on load, and then every 3 seconds
+        fetchScores();
+        setInterval(fetchScores, 3000); 
+    </script>
+</body>
+</html>
