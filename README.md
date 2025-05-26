@@ -8,18 +8,6 @@
 
 
 
-
- _______                                                                           _         _   
-|_   __ \                                                                         / \       (_)  
-  | |__) |  _ .--.    .--.    _ .--.    .---.    .--.    _ .--.   _ .--.         / _ \      __   
-  |  ___/  [ `/'`\] / .'`\ \ [ '/'`\ \ / /'`\] / .'`\ \ [ `/'`\] [ `.-. |       / ___ \    [  |  
- _| |_      | |     | \__. |  | \__/ | | \__.  | \__. |  | |      | | | |     _/ /   \ \_   | |  
-|_____|    [___]     '.__.'   | ;.__/  '.___.'  '.__.'  [___]    [___||__]   |____| |____| [___] 
-                             [__|                                                                
-
-
-
-
 # Propcorn AI - Intelligent, Context-Aware Rate Limiter
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
