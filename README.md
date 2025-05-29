@@ -82,6 +82,42 @@ This page polls the `/admin/scores` endpoint every 3 seconds and displays the sc
 
 ---
 
+### **Usage & Examples**
+
+Here are some example `curl` commands to interact with the service.
+
+**Note for Windows Users:** The Windows Command Prompt (`cmd.exe`) requires escaping double quotes differently. Please use `\"` for quotes inside the data string (e.g., `-d "{ \"points\": 5 }" `).
+
+1.  **Set a new default rate limit:**
+    ```bash
+    curl -X POST -H "Content-Type: application/json" -H "x-admin-api-key: supersecretkey" -d '{ "points": 5, "duration": 20 }' http://localhost:3000/admin/config/default
+    ```
+
+2.  **Trigger the rate limiter:**
+    *(Run this 6 times to see the 6th request get blocked)*
+    ```bash
+    curl http://localhost:3000/api/data
+    ```
+
+3.  **Simulate a "Good Actor" to increase trust score:**
+    *(Run this a few times and watch the scoreboard at http://localhost:3000/scoreboard)*
+    ```bash
+    curl -X POST -H "Content-Type: application/json" -H "x-api-key: good-actor-007" -d '{ "data":"valuable info" }' http://localhost:3000/api/submit
+    ```
+
+4.  **Simulate a "Bad Actor" to decrease trust score:**
+    *(Set a limit of 5, then run this 6 times. The 6th request will fail and lower the score)*
+    ```bash
+    curl -H "x-api-key: bad-actor-001" http://localhost:3000/api/data
+    ```
+
+5.  **Check all current trust scores:**
+    ```bash
+    curl -H "x-admin-api-key: supersecretkey" http://localhost:3000/admin/scores
+    ```
+
+---
+
 ### **API Endpoints**
 
 The service exposes two sets of endpoints: the public API and the admin API.
